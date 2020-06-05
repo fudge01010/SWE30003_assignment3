@@ -7,14 +7,14 @@ namespace Assignment3.Helpers
 {
     public static class MenuHolder
     {
-        private static MenuController menuController;
+        private static MainMenuController menuController;
 
-        public static MenuController GetMenuController()
+        public static MainMenuController GetMenuController()
         {
             return menuController;
         }
 
-        public static void SetMenuController(MenuController contr)
+        public static void SetMenuController(MainMenuController contr)
         {
             menuController = contr;
         }

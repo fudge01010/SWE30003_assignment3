@@ -12,7 +12,9 @@ namespace Assignment3
     {
         protected IController loginController;
         protected IController orderController;
-        static protected MenuController menuController;
+        protected TableManager tableManager;
+        protected CustomerManager customerManager;
+        static protected MainMenuController menuController;
 
         static void Main(string[] args)
         {
@@ -25,19 +27,32 @@ namespace Assignment3
         {
             // create the DBManager static helper, and let it create the SQLite connection.
             DBManager.CreateConnection();
-            DBManager.CreateTable();
-            DBManager.CloseConnection();
 
             // create menu controller, which holds a list of other controllers to generate menu.
-            menuController = new MenuController();
+            menuController = new MainMenuController();
             //add a reference to that controller to the static helper MenuHolder function.
             MenuHolder.SetMenuController(menuController);
 
+            // add the remaining screen controllers to the main menu controller.
             loginController = new LoginController();
             menuController.AddController(loginController);
 
             orderController = new OrderController();
             menuController.AddController(orderController);
+
+            // now we have all the mvc controllers created, create the "managers" for the data models.
+            
+            tableManager = new TableManager();
+
+            customerManager = new CustomerManager();
+
+
+
+
+
+
+            // load the contents from the 
+            DBManager.CloseConnection();
 
             // go to the login/auth page
             loginController.Show();

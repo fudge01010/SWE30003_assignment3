@@ -9,6 +9,12 @@ namespace Assignment3.Models
         private string name;
         private string description;
         private float price;
+        private readonly int id;
+
+        public DrinkItem(int itemid)
+        {
+            id = itemid;
+        }
         public string GetName()
         {
             return name;
@@ -37,6 +43,11 @@ namespace Assignment3.Models
         public void SetDescription(string value)
         {
             description = value;
+        }
+
+        public int GetId()
+        {
+            return id;
         }
     }
 }

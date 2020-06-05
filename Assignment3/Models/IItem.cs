@@ -6,6 +6,7 @@ namespace Assignment3.Models
 {
     interface IItem
     {
+        int GetId();
         string GetName();
         void SetName(string value);
 
