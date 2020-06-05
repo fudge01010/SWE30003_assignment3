@@ -23,6 +23,11 @@ namespace Assignment3
 
         public void SetupProgram()
         {
+            // create the DBManager static helper, and let it create the SQLite connection.
+            DBManager.CreateConnection();
+            DBManager.CreateTable();
+            DBManager.CloseConnection();
+
             // create menu controller, which holds a list of other controllers to generate menu.
             menuController = new MenuController();
             //add a reference to that controller to the static helper MenuHolder function.
