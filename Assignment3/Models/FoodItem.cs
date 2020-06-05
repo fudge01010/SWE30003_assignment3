@@ -11,19 +11,17 @@ namespace Assignment3.Models
         private float price;
         private readonly int id;
 
-        public FoodItem(int itemid)
+        public FoodItem(int itemid, string itemname, string descri, float itemprice)
         {
-            // constructor, taking in ID
+            // constructor
             id = itemid;
+            name = itemname;
+            description = descri;
+            price = itemprice;
         }
         public string GetName()
         {
             return name;
-        }
-
-        public void SetName(string value)
-        {
-            name = value;
         }
 
         public float GetPrice()
@@ -31,19 +29,10 @@ namespace Assignment3.Models
             return price;
         }
 
-        public void SetPrice(float value)
-        {
-            price = value;
-        }
 
         public string GetDescription()
         {
             return description;
-        }
-
-        public void SetDescription(string value)
-        {
-            description = value;
         }
 
         public int GetId()

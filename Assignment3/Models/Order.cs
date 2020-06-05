@@ -8,6 +8,7 @@ namespace Assignment3.Models
     {
         private DateTime timeOpened;
         private List<IItem> items;
+        private int customerId;
 
         public Order()
         {

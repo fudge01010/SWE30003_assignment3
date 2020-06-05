@@ -10,10 +10,22 @@ namespace Assignment3.Models
         private DateTime timeOpened;
         private readonly Order parentOrder;
 
-        public Ticket(Order parent)
+        public Ticket(Order parent, List<IItem> itemsOnTicket)
         {
             //constructor
             parentOrder = parent;
+            items = itemsOnTicket;
+        }
+
+        public Order Parent()
+        {
+            return parentOrder;
+        }
+        public int TableNumber()
+        {
+            //returns tableNumber, based on parent order
+            //parentOrder.TableNumber();
+            return 0;
         }
     }
 }

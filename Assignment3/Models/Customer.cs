@@ -44,5 +44,19 @@ namespace Assignment3.Models
             customerDateCreated = createdDate;
         }
 
+        public string GetPhone()
+        {
+            return customerPhone;
+        }
+
+        public string GetAddress()
+        {
+            return customerAddress;
+        }
+
+        public string GetName()
+        {
+            return customerName;
+        }
     }
 }

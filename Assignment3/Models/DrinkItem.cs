@@ -15,35 +15,32 @@ namespace Assignment3.Models
         {
             id = itemid;
         }
+
+        public DrinkItem(int itemid, string itemname, string itemdescription, float itemprice)
+        {
+            // overloaded constructor
+            id = itemid;
+            description = itemdescription;
+            price = itemprice;
+            name = itemname;
+        }
         public string GetName()
         {
             return name;
         }
 
-        public void SetName(string value)
-        {
-            name = value;
-        }
 
         public float GetPrice()
         {
             return price;
         }
 
-        public void SetPrice(float value)
-        {
-            price = value;
-        }
 
         public string GetDescription()
         {
             return description;
         }
 
-        public void SetDescription(string value)
-        {
-            description = value;
-        }
 
         public int GetId()
         {

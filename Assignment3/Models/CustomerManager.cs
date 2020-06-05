@@ -19,5 +19,11 @@ namespace Assignment3.Models
         {
             custs.Add(customer);
         }
+
+        public Customer GetCustomerByPhone(string phoneNumber)
+        {
+            //
+            return custs.Find(x => x.GetPhone() == phoneNumber);
+        }
     }
 }

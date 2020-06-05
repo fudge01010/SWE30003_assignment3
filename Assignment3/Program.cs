@@ -12,8 +12,13 @@ namespace Assignment3
     {
         protected IController loginController;
         protected IController orderController;
+        protected IController kitchenTicketController;
+        protected IController barTicketController;
+
+
         protected TableManager tableManager;
         protected CustomerManager customerManager;
+        protected TicketManager ticketManager;
         static protected MainMenuController menuController;
 
         static void Main(string[] args)
@@ -40,11 +45,24 @@ namespace Assignment3
             orderController = new OrderController();
             menuController.AddController(orderController);
 
+            // create the TicketManager before creating the ticket controllers, so we can pass that in via reference
+            ticketManager = new TicketManager();
+
+            kitchenTicketController = new KitchenTicketController(ticketManager);
+            menuController.AddController(kitchenTicketController);
+
+            barTicketController = new BarTicketController(ticketManager);
+            menuController.AddController(barTicketController);
+
             // now we have all the mvc controllers created, create the "managers" for the data models.
             
             tableManager = new TableManager();
 
             customerManager = new CustomerManager();
+
+            
+
+            
 
 
 

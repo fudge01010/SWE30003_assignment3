@@ -8,12 +8,9 @@ namespace Assignment3.Models
     {
         int GetId();
         string GetName();
-        void SetName(string value);
 
         float GetPrice();
-        void SetPrice(float value);
 
         string GetDescription();
-        void SetDescription(string value);
     }
 }

@@ -24,7 +24,7 @@ namespace Assignment3.Controllers
             this.view = new OrderView();
         }
 
-        void IController.SetView(IView view)
+        public void SetView(IView view)
         {
             this.view = (OrderView)view;
         }
