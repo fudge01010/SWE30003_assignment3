@@ -6,16 +6,16 @@ namespace Assignment3.Models
 {
     class DineIn : Order
     {
-        private readonly int tableNumber;
-        public DineIn(int table)
+        private readonly int tabNum;
+        public DineIn(int customerId, int tableNumber) : base(customerId)
         {
             // constructor
-            tableNumber = table;
+            tabNum = tableNumber;
         }
 
         public int TableNumber()
         {
-            return tableNumber;
+            return tabNum;
         }
     }
 }

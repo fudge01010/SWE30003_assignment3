@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Assignment3.Models
 {
-    interface IItem
+    public interface IItem
     {
         int GetId();
         string GetName();

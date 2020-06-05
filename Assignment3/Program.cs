@@ -1,24 +1,25 @@
 ﻿using Assignment3.Models;
-using Assignment3.Views;
 using Assignment3.Controllers;
 using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using Assignment3.Helpers;
 
 namespace Assignment3
 {
     class Program
     {
+        // MVC controllers
         protected IController loginController;
         protected IController orderController;
         protected IController kitchenTicketController;
         protected IController barTicketController;
 
-
+        // "managers" - in the Model domain
         protected TableManager tableManager;
         protected CustomerManager customerManager;
         protected TicketManager ticketManager;
+        protected ItemManager itemManager;
+
+        // a special main menu controller (static) so we can always find our way home :)
         static protected MainMenuController menuController;
 
         static void Main(string[] args)
@@ -31,6 +32,8 @@ namespace Assignment3
 
         public void SetupProgram()
         {
+            // this is the "bootstrap" method, you could say.... ;)
+
             // create the DBManager static helper, and let it create the SQLite connection.
             DBManager.CreateConnection();
 
@@ -39,10 +42,11 @@ namespace Assignment3
             //add a reference to that controller to the static helper MenuHolder function.
             MenuHolder.SetMenuController(menuController);
 
-            // add the remaining screen controllers to the main menu controller.
+            // create the login controller screen
             loginController = new LoginController();
             menuController.AddController(loginController);
 
+            // create the order controller screen
             orderController = new OrderController();
             menuController.AddController(orderController);
 
@@ -56,10 +60,13 @@ namespace Assignment3
             menuController.AddController(barTicketController);
 
             // now we have all the mvc controllers created, create the "managers" for the data models.
+            // each constructor should have a call to the DB helper class, to load it's data.
             
             tableManager = new TableManager();
 
             customerManager = new CustomerManager();
+
+            itemManager = new ItemManager();
 
             
 

@@ -3,6 +3,8 @@ using System.Data.SQLite;
 using System.Collections.Generic;
 using System.Text;
 using Assignment3.Models;
+using System.Linq.Expressions;
+using System.IO;
 
 namespace Assignment3.Helpers
 {
@@ -90,6 +92,49 @@ namespace Assignment3.Helpers
             //sqlite_cmd2.ExecuteNonQuery();
 
             return customers;
+        }
+
+        public static List<IItem> LoadFromDB_Items()
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT * FROM Products";
+
+            List<IItem> items = new List<IItem>();
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                if (reader.GetInt16(4) == 0)
+                {
+                    //it's a food item.
+                    int id = reader.GetInt32(0);
+                    string prodName = reader.GetString(1);
+                    string desc = "";
+                    if (reader[2].GetType() != typeof(DBNull))
+                        desc = reader.GetString(1);
+                    else
+                        desc = null;
+                    string price = reader.GetString(3);
+                    items.Add(new FoodItem(id, prodName, desc, float.Parse(price)));
+                } else if (reader.GetInt16(4) == 1)
+                {
+                    // it's a drink item
+                    int id = reader.GetInt32(0);
+                    string prodName = reader.GetString(1);
+                    string desc = "";
+                    if (reader[2].GetType() != typeof(DBNull))
+                        desc = reader.GetString(1);
+                    else
+                        desc = null;
+                    string price = reader.GetString(3);
+                    items.Add(new DrinkItem(id, prodName, desc, float.Parse(price)));
+                } else
+                {
+                    // we should never be here - it means the database has a product type that isn't 1 or 0.
+                    throw new InvalidDataException();
+                }
+            }
+            return items;
         }
 
     }

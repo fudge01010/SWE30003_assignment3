@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace Assignment3.Models
 {
@@ -49,6 +47,11 @@ namespace Assignment3.Models
             return drinkItems;
         }
 
+        public void MarkTicketComplete()
+        {
+            // first, fold the items from the ticket's list into the orders list.
+            Parent().AddItems(items);
+        }
         
     }
 }

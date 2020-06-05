@@ -7,9 +7,9 @@ namespace Assignment3.Models
     class TakeAway : Order
     {
         private string name;
-        public TakeAway(string custName)
+        public TakeAway(int customerId, string custName) : base(customerId)
         {
-            // constructor
+
             name = custName;
         }
 
