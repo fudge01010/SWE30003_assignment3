@@ -23,6 +23,7 @@ namespace Assignment3
 
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             //Console.WriteLine("Hello World!");
             Program program = new Program();
             program.SetupProgram();

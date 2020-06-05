@@ -21,12 +21,33 @@ namespace Assignment3.Views
 
         public void ShowMessage(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void ShowView()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine("============ currently active KITCHEN tickets: ============");
+        }
+
+        public void ShowTicket(int tableNumber, string items, string openFor, int ticketNumber)
+        {
+            // method for DineIn
+            Console.WriteLine("Ticket for table number: " + tableNumber.ToString());
+            Console.WriteLine("Ticket has been open for: " + openFor);
+            Console.WriteLine("Ticket contents:");
+            Console.WriteLine(items);
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+
+        public void ShowTicket(string name, string items, string openFor, int ticketNumber)
+        {
+            // overloaded method for takeaway (name instead of table number)
+            Console.WriteLine("Ticket for takeaway order : " + name);
+            Console.WriteLine("Ticket has been open for: " + openFor);
+            Console.WriteLine("Ticket contents:");
+            Console.WriteLine(items);
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
     }
 }
