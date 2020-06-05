@@ -47,12 +47,23 @@ namespace Assignment3.Controllers
                 if (t.Parent().GetType() == typeof(DineIn))
                 {
                     // it's a dine in order
-                    this.view.ShowTicket(t.TableNumber(), "\t-Cheeseburger\n\t-Pizza", "00:22:02", i);
+                    string items = "";
+                    foreach (IItem itm in t.BarItems())
+                    {
+                        items += "\t - " + itm.GetName() + "\n";
+                    }
+                    this.view.ShowTicket(t.TableNumber(), items, (DateTime.Now- t.TimeOpened()).ToString(), i);
                 }
                 if (t.Parent().GetType() == typeof(TakeAway) )
                 {
                     // it's a takeaway ticket
-                    this.view.ShowTicket(((TakeAway)t.Parent()).Name(), "\t-Cheeseburger\n\t-Pizza", "00:22:02", i);
+                    string items = "";
+                    foreach (IItem itm in t.BarItems())
+                    {
+                        items += "\t - " + itm.GetName() + "\n";
+                    }
+                    
+                    this.view.ShowTicket(((TakeAway)t.Parent()).Name(), items, (DateTime.Now - t.TimeOpened()).ToString(), i);
                 }
                 i++;
             }
