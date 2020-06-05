@@ -7,13 +7,7 @@ namespace Assignment3.Views
 {
     class LoginView : IView
     {
-        private IController controller;
         private IView view;
-
-        void IView.SetController(IController controller)
-        {
-            this.controller = controller;
-        }
 
         public void ShowView()
         {
@@ -28,7 +22,9 @@ namespace Assignment3.Views
 
         public void ShowError(string error)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(error);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }

@@ -14,7 +14,9 @@ namespace Assignment3.Views
 
         public void ShowError(string error)
         {
-            throw new NotImplementedException();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(error);
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void ShowMessage(string message)
