@@ -26,5 +26,10 @@ namespace Assignment3.Models
         {
             return items.Find(x => x.GetId() == itemId);
         }
+
+        public List<IItem> GetItems()
+        {
+            return items;
+        }
     }
 }

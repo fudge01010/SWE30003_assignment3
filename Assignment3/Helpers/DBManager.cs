@@ -74,7 +74,10 @@ namespace Assignment3.Helpers
                 else
                     phone = null;
                 if (reader[3].GetType() != typeof(DBNull))
-                    address = reader.GetString(3);
+                { 
+                Console.WriteLine(reader[3].GetType().ToString());
+                address = reader.GetString(3);
+                 }
                 else
                     address = null;
                 created = Convert.ToDateTime(reader.GetString(4));
@@ -111,10 +114,12 @@ namespace Assignment3.Helpers
                     string prodName = reader.GetString(1);
                     string desc = "";
                     if (reader[2].GetType() != typeof(DBNull))
-                        desc = reader.GetString(1);
+                        desc = reader.GetString(2);
                     else
                         desc = null;
-                    string price = reader.GetString(3);
+                    //Console.WriteLine(reader[3].GetType().ToString());
+                    string price = reader.GetDecimal(3).ToString();
+
                     items.Add(new FoodItem(id, prodName, desc, float.Parse(price)));
                 } else if (reader.GetInt16(4) == 1)
                 {
@@ -126,7 +131,8 @@ namespace Assignment3.Helpers
                         desc = reader.GetString(1);
                     else
                         desc = null;
-                    string price = reader.GetString(3);
+                    //Console.WriteLine(reader[3].GetType().ToString());
+                    string price = reader.GetDecimal(3).ToString();
                     items.Add(new DrinkItem(id, prodName, desc, float.Parse(price)));
                 } else
                 {

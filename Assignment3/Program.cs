@@ -12,12 +12,14 @@ namespace Assignment3
         protected IController orderController;
         protected IController kitchenTicketController;
         protected IController barTicketController;
+        protected IController itemController;
 
         // "managers" - in the Model domain
         protected TableManager tableManager;
         protected CustomerManager customerManager;
         protected TicketManager ticketManager;
         protected ItemManager itemManager;
+        
 
         // a special main menu controller (static) so we can always find our way home :)
         static protected MainMenuController menuController;
@@ -59,6 +61,13 @@ namespace Assignment3
             barTicketController = new BarTicketController(ticketManager);
             menuController.AddController(barTicketController);
 
+            // create the item manager, and then the item view controller. Pass manager into controller.
+
+            itemManager = new ItemManager();
+
+            itemController = new ItemController(itemManager);
+            menuController.AddController(itemController);
+
             // now we have all the mvc controllers created, create the "managers" for the data models.
             // each constructor should have a call to the DB helper class, to load it's data.
             
@@ -66,7 +75,7 @@ namespace Assignment3
 
             customerManager = new CustomerManager();
 
-            itemManager = new ItemManager();
+            
 
             
 

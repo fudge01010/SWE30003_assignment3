@@ -39,5 +39,10 @@ namespace Assignment3.Models
         {
             return id;
         }
+
+        public override string ToString()
+        {
+            return "Food Item";
+        }
     }
 }
