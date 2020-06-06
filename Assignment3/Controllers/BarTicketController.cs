@@ -17,11 +17,6 @@ namespace Assignment3.Controllers
         {
             CreateView();
             ticketMan = ticman;
-            //DineIn testOrder = new DineIn(0, 3);
-            //FoodItem testFood = new FoodItem(1, "cheeseburger", "a cheeseburger", 12.92f);
-            //DrinkItem testDrink = new DrinkItem(2, "coffee", "a coffee", 4.25f);
-            //Ticket testTicket = new Ticket(testOrder, new List<IItem>(){ testFood, testDrink });
-            //ticketMan.AddTicket(testTicket);
         }
         public void CreateView()
         {
@@ -42,28 +37,28 @@ namespace Assignment3.Controllers
         {
             this.view.ShowView();
             int i = 0;
-            foreach (Ticket t in ticketMan.Tickets())
+            for (i =0; i<ticketMan.Tickets().Count; i++)
             {
-                if (t.Parent().GetType() == typeof(DineIn))
+                if (ticketMan.Tickets()[i].Parent().GetType() == typeof(DineIn))
                 {
                     // it's a dine in order
                     string items = "";
-                    foreach (IItem itm in t.BarItems())
+                    foreach (IItem itm in ticketMan.Tickets()[i].BarItems())
                     {
                         items += "\t - " + itm.GetName() + "\n";
                     }
-                    this.view.ShowTicket(t.TableNumber(), items, (DateTime.Now- t.TimeOpened()).ToString(), i);
+                    this.view.ShowTicket(ticketMan.Tickets()[i].TableNumber(), items, (DateTime.Now- ticketMan.Tickets()[i].TimeOpened()).ToString(), i);
                 }
-                if (t.Parent().GetType() == typeof(TakeAway) )
+                if (ticketMan.Tickets()[i].Parent().GetType() == typeof(TakeAway) )
                 {
                     // it's a takeaway ticket
                     string items = "";
-                    foreach (IItem itm in t.BarItems())
+                    foreach (IItem itm in ticketMan.Tickets()[i].BarItems())
                     {
                         items += "\t - " + itm.GetName() + "\n";
                     }
                     
-                    this.view.ShowTicket(((TakeAway)t.Parent()).Name(), items, (DateTime.Now - t.TimeOpened()).ToString(), i);
+                    this.view.ShowTicket(((TakeAway)ticketMan.Tickets()[i].Parent()).Name(), items, (DateTime.Now - ticketMan.Tickets()[i].TimeOpened()).ToString(), i);
                 }
                 i++;
             }
@@ -86,14 +81,16 @@ namespace Assignment3.Controllers
                     }
                 } else
                 {
-                    if (selection >= ticketMan.Tickets().Count || selection < 0)
+                    if (selection > i || selection < 0)
                     {
                         this.view.ShowError("Enter a valid option");
                         continue;
                     } else
                     {
+                        ticketMan.Tickets().Remove(ticketMan.Tickets()[selection]);
                         // Business logic to mark ticket as complete, and fold items into order.
                         // markoff[input] - or something to that effect
+                        Show();
                     }
                 }
             }

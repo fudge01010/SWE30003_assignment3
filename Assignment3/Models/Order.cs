@@ -69,10 +69,30 @@ namespace Assignment3.Models
             return items;
         }
 
+        public string FormattedTempItemsOnOrder()
+        {
+            string items = "";
+            foreach (IItem item in ItemsOnOrderTemp())
+            {
+                items += "\t- " + item.GetName() + "\n";
+            }
+            return items;
+        }
+
         public float GetOrderCost()
         {
             float cost = 0.0f;
             foreach (IItem i in ItemsOnOrder())
+            {
+                cost += i.GetPrice();
+            }
+            return (float)Math.Round(cost, 2);
+        }
+
+        public float GetTempOrderCost()
+        {
+            float cost = 0.0f;
+            foreach (IItem i in ItemsOnOrderTemp())
             {
                 cost += i.GetPrice();
             }

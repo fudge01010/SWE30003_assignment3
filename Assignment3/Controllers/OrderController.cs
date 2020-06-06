@@ -59,7 +59,7 @@ namespace Assignment3.Controllers
             while (true)
             {
                 // main command input loop
-                view.ShowMessage("Enter 'n' for a new order, or 'e' to perform actions on an existing order.");
+                view.ShowMessage("Enter 'n' for a new order, or 'e' to perform actions on an existing order. Enter 'm' to go back to the main menu.");
                 string input = Console.ReadLine();
                 if (input == "e" && orders.Count <= 0)
                 {
@@ -197,9 +197,12 @@ namespace Assignment3.Controllers
                         }
                     }
                 }
-                else
+                else if (input == "m")
                 {
-
+                    MenuHolder.GetMenuController().Show();
+                } else
+                {
+                    throw new Exception();
                 }
             }
         }
@@ -262,25 +265,19 @@ namespace Assignment3.Controllers
 
         public void AddItems(Order orderEditing)
         {
-            view.Clear();
-            view.ShowOrder(orderEditing.TableNumber(), orderEditing.OpenedFor(), orderEditing.FormattedItemsOnOrder(), orderEditing.GetOrderCost());
-            view.ShowMessage("==========================================");
-            view.ShowMessage("Items available to add:");
-            view.ShowMessage(itemManager.GetFormattedItems());
-            view.ShowMessage("Enter the product ID to add to this order, or press 's' to save, or 'c' to cancel changes.");
             while (true)
             {
+                view.Clear();
+                view.ShowOrder(orderEditing.TableNumber(), orderEditing.OpenedFor(), orderEditing.FormattedTempItemsOnOrder(), orderEditing.GetTempOrderCost());
+                view.ShowMessage("==========================================");
+                view.ShowMessage("Items available to add:");
+                view.ShowMessage(itemManager.GetFormattedItems());
+                view.ShowMessage("Enter the product ID to add to this order, or press 's' to save, or 'c' to cancel changes.");
+            
                 string cmd = Console.ReadLine();
                 int i = -1;
-                Int32.TryParse(cmd, out (i));
-                if (i == -1 && !((cmd == "s" || cmd == "c")))
-                {
-                    // isn't a number, also isn't s or c
-                    view.ShowError("Please enter a valid command");
-                } else if (!(i > 0 && i < itemManager.GetItems().Count))
-                {
-                    view.ShowError("Please enter an item ID in range.");
-                } else if (cmd == "s")
+                bool status = Int32.TryParse(cmd, out (i));
+                if (cmd == "s")
                 {
                     // save the order, generate ticket
                     // first save the temp ticket as a real ticket
@@ -292,12 +289,22 @@ namespace Assignment3.Controllers
                     // delete the temp ticket reference
                     orderEditing.SetTempTicket(null);
                     Show();
-                } else if (cmd == "c")
+                }
+                else if (cmd == "c")
                 {
                     // purge the temp ticket
                     orderEditing.SetTempTicket(null);
                     Show();
-                } else
+                }
+                else if (!status)
+                {
+                    view.ShowError("Please enter a valid letter command.");
+                }
+                else if (!(i > 0 && i < itemManager.GetItems().Count + 1))
+                {
+                    view.ShowError("Please enter an item ID in range.");
+                }
+                else
                 {
                     // it's a number. lookup item and add to ticket.
                     orderEditing.TempTicket().AddItem(itemManager.GetItem(i));

@@ -97,8 +97,10 @@ namespace Assignment3.Controllers
                     }
                     else
                     {
+                        ticketMan.Tickets().Remove(ticketMan.Tickets()[selection]);
                         // Business logic to mark ticket as complete, and fold items into order.
                         // markoff[input] - or something to that effect
+                        Show();
                     }
                 }
             }

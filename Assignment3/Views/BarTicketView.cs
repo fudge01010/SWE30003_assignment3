@@ -29,6 +29,7 @@ namespace Assignment3.Views
         public void ShowTicket(int tableNumber, string items, string openFor, int ticketNumber)
         {
             // method for DineIn
+            Console.WriteLine("Ticket Number: " + ticketNumber.ToString());
             Console.WriteLine("Ticket for table number: " + tableNumber.ToString());
             Console.WriteLine("Ticket has been open for: " + openFor);
             Console.WriteLine("Ticket contents:");
