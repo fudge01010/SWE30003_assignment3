@@ -58,5 +58,10 @@ namespace Assignment3.Models
         {
             return customerName;
         }
+
+        public int GetId()
+        {
+            return customerID;
+        }
     }
 }

@@ -31,5 +31,18 @@ namespace Assignment3.Models
         {
             return items;
         }
+
+        public string GetFormattedItems()
+        {
+            String s = "";
+            foreach (IItem i in GetItems())
+            {
+                s += ("| " + i.GetId().ToString().PadRight(3) + " | ");
+                s += (i.GetName().PadRight(20) + " | ");
+                s += (i.GetDescription().PadRight(50) + " | ");
+                s += (i.GetPrice().ToString().PadRight(5) + " | \n");
+            }
+            return s;
+        }
     }
 }

@@ -97,6 +97,35 @@ namespace Assignment3.Helpers
             return customers;
         }
 
+        public static Customer GetCustomer(int custId)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT * FROM Customers WHERE CustomerID = $cid";
+            sqlite_cmd.Parameters.AddWithValue("$cid", custId);
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            string name, phone, address = null;
+            DateTime created;
+            if (reader[1].GetType() != typeof(DBNull))
+                name = reader.GetString(1);
+            else
+                name = null;
+            if (reader[2].GetType() != typeof(DBNull))
+                phone = reader.GetString(2);
+            else
+                phone = null;
+            if (reader[3].GetType() != typeof(DBNull))
+            {
+                Console.WriteLine(reader[3].GetType().ToString());
+                address = reader.GetString(3);
+            }
+            else
+                address = null;
+            created = Convert.ToDateTime(reader.GetString(4));
+            return new Customer(custId, name, phone, address, created);
+        }
+
         public static List<IItem> LoadFromDB_Items()
         {
             SQLiteCommand sqlite_cmd;
@@ -153,6 +182,16 @@ namespace Assignment3.Helpers
             return reader.GetInt32(0) + 1;
         }
 
+        public static int GetNextCustomerId()
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT seq FROM sqlite_sequence WHERE name = 'Customers'";
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            return reader.GetInt32(0) + 1;
+        }
+
         public static void AddProduct(IItem productToAdd)
         {
             // extract info from product
@@ -197,6 +236,44 @@ namespace Assignment3.Helpers
 
             // run that shit
             sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public static void AddCustomer(Customer customer)
+        {
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "INSERT INTO Customers (CustomerID, CustomerName, CustomerPhone, CustomerAddress, CustomerDateCreated) VALUES ($id, $name, $phone, $address, $created)";
+            sqlite_cmd.Parameters.AddWithValue("$id", customer.GetId());
+            sqlite_cmd.Parameters.AddWithValue("$name", customer.GetName());
+            sqlite_cmd.Parameters.AddWithValue("$phone", customer.GetPhone());
+            sqlite_cmd.Parameters.AddWithValue("$address", customer.GetAddress());
+            sqlite_cmd.Parameters.AddWithValue("$created", DateTime.Now.ToString());
+
+            // run that shit
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public static int LookupCustomer(string phNumb)
+        {
+            // query to see if the number exists. returns -1 if not; otherwise returns customerId
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "SELECT CustomerID FROM Customers WHERE CustomerPhone = $phone";
+            sqlite_cmd.Parameters.AddWithValue("$phone", phNumb);
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            //reader.Read();
+            if (!reader.Read())
+            {
+                return -1;
+            }
+            else
+            {
+                return reader.GetInt32(0);
+            }
         }
 
     }

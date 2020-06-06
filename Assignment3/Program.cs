@@ -48,12 +48,18 @@ namespace Assignment3
             loginController = new LoginController();
             menuController.AddController(loginController);
 
-            // create the order controller screen
-            orderController = new OrderController();
-            menuController.AddController(orderController);
+            // create the table manager (loads tables from DB upon creation)
+            tableManager = new TableManager();
+
+            // create the item manager (loads items from DB upon creation)
+            itemManager = new ItemManager();
 
             // create the TicketManager before creating the ticket controllers, so we can pass that in via reference
             ticketManager = new TicketManager();
+
+            // create the order controller screen
+            orderController = new OrderController(tableManager, itemManager, ticketManager);
+            menuController.AddController(orderController);
 
             kitchenTicketController = new KitchenTicketController(ticketManager);
             menuController.AddController(kitchenTicketController);
@@ -63,15 +69,13 @@ namespace Assignment3
 
             // create the item manager, and then the item view controller. Pass manager into controller.
 
-            itemManager = new ItemManager();
-
             itemController = new ItemController(itemManager);
             menuController.AddController(itemController);
 
             // now we have all the mvc controllers created, create the "managers" for the data models.
             // each constructor should have a call to the DB helper class, to load it's data.
             
-            tableManager = new TableManager();
+            
 
             customerManager = new CustomerManager();
 

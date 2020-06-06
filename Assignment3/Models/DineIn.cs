@@ -13,7 +13,7 @@ namespace Assignment3.Models
             tabNum = tableNumber;
         }
 
-        public int TableNumber()
+        public override int TableNumber()
         {
             return tabNum;
         }

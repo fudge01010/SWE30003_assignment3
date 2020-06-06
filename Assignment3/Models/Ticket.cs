@@ -10,11 +10,11 @@ namespace Assignment3.Models
         private DateTime timeOpened;
         private readonly Order parentOrder;
 
-        public Ticket(Order parent, List<IItem> itemsOnTicket)
+        public Ticket(Order parent)
         {
             //constructor
             parentOrder = parent;
-            items = itemsOnTicket;
+            items = new List<IItem>();
             timeOpened = DateTime.Now;
         }
 
@@ -31,8 +31,7 @@ namespace Assignment3.Models
         public int TableNumber()
         {
             //returns tableNumber, based on parent order
-            //parentOrder.TableNumber();
-            return 0;
+            return parentOrder.TableNumber();
         }
 
         public List<FoodItem> KitchenItems()
@@ -47,10 +46,20 @@ namespace Assignment3.Models
             return drinkItems;
         }
 
+        public List<IItem> Items()
+        {
+            return items;
+        }
+
         public void MarkTicketComplete()
         {
             // first, fold the items from the ticket's list into the orders list.
-            Parent().AddItems(items);
+            items.Clear();
+        }
+
+        public void AddItem(IItem item)
+        {
+            items.Add(item);
         }
         
     }

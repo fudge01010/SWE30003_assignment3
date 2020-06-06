@@ -17,11 +17,11 @@ namespace Assignment3.Controllers
         {
             CreateView();
             ticketMan = ticman;
-            DineIn testOrder = new DineIn(0, 3);
-            FoodItem testFood = new FoodItem(1, "cheeseburger", "a cheeseburger", 12.92f);
-            DrinkItem testDrink = new DrinkItem(2, "coffee", "a coffee", 4.25f);
-            Ticket testTicket = new Ticket(testOrder, new List<IItem>(){ testFood, testDrink });
-            ticketMan.AddTicket(testTicket);
+            //DineIn testOrder = new DineIn(0, 3);
+            //FoodItem testFood = new FoodItem(1, "cheeseburger", "a cheeseburger", 12.92f);
+            //DrinkItem testDrink = new DrinkItem(2, "coffee", "a coffee", 4.25f);
+            //Ticket testTicket = new Ticket(testOrder, new List<IItem>(){ testFood, testDrink });
+            //ticketMan.AddTicket(testTicket);
         }
         public void CreateView()
         {
