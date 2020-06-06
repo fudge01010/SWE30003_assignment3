@@ -12,5 +12,9 @@ namespace Assignment3.Models
         float GetPrice();
 
         string GetDescription();
+
+        void UpdateName(string newName);
+        void UpdatePrice(float newPrice);
+        void UpdateDescription(string newDesc);
     }
 }

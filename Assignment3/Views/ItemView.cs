@@ -22,7 +22,12 @@ namespace Assignment3.Views
         public void ShowView()
         {
             Console.Clear();
-            Console.WriteLine("==================== List of products =======================");
+            Console.WriteLine("  =============================== List of products ===========================  ");
+        }
+
+        public void Clear()
+        {
+            Console.Clear();
         }
 
         public void ShowMenuItem(string identifier, string itemName, string desc, string price, string type)

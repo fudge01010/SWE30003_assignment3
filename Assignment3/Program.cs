@@ -87,7 +87,6 @@ namespace Assignment3
 
 
             // load the contents from the 
-            DBManager.CloseConnection();
 
             // go to the login/auth page
             loginController.Show();

@@ -44,5 +44,20 @@ namespace Assignment3.Models
         {
             return "Food Item";
         }
+
+        public void UpdateName(string newName)
+        {
+            name = newName;
+        }
+
+        public void UpdatePrice(float newPrice)
+        {
+            price = newPrice;
+        }
+
+        public void UpdateDescription(string newDesc)
+        {
+            description = newDesc;
+        }
     }
 }

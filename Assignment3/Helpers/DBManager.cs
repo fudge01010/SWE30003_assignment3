@@ -143,5 +143,61 @@ namespace Assignment3.Helpers
             return items;
         }
 
+        public static int GetNextProductId()
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT seq FROM sqlite_sequence WHERE name = 'Products'";
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            return reader.GetInt32(0) + 1;
+        }
+
+        public static void AddProduct(IItem productToAdd)
+        {
+            // extract info from product
+            int itemType;
+            if (productToAdd.GetType() == typeof(FoodItem))
+            {
+                itemType = 0;
+            } else if (productToAdd.GetType() == typeof(DrinkItem))
+            {
+                itemType = 1;
+            } else
+            {
+                throw new Exception();
+            }
+
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "INSERT INTO Products (ProductID, ProductName, ProductDesc, ProductPrice, ProductType) VALUES ($id, $name, $desc, $price, $type)";
+            sqlite_cmd.Parameters.AddWithValue("$id", productToAdd.GetId());
+            sqlite_cmd.Parameters.AddWithValue("$name", productToAdd.GetName());
+            sqlite_cmd.Parameters.AddWithValue("desc", productToAdd.GetDescription());
+            sqlite_cmd.Parameters.AddWithValue("price", Math.Round(productToAdd.GetPrice(),2));
+            sqlite_cmd.Parameters.AddWithValue("type", itemType);
+
+            // run that shit
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+        public static void UpdateProduct(IItem productToUpdate)
+        {
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "UPDATE Products SET ProductName = $name, ProductDesc = $desc, ProductPrice = $price WHERE ProductID = $id";
+            sqlite_cmd.Parameters.AddWithValue("$id", productToUpdate.GetId());
+            sqlite_cmd.Parameters.AddWithValue("$name", productToUpdate.GetName());
+            sqlite_cmd.Parameters.AddWithValue("desc", productToUpdate.GetDescription());
+            sqlite_cmd.Parameters.AddWithValue("price", Math.Round(productToUpdate.GetPrice(), 2));
+
+            // run that shit
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
     }
 }
