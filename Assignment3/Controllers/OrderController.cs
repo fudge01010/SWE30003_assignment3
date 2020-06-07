@@ -25,6 +25,7 @@ namespace Assignment3.Controllers
             itemManager = itemMan;
             ticketManager = ticketMan;
         }
+
         public string GetPrettyName()
         {
             return "Orders Page";

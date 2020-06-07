@@ -39,6 +39,9 @@ namespace Assignment3.Controllers
             {
                 view.ShowSale(s);
             }
+            view.ShowMessage("Press enter to go back to the main menu...");
+            Console.ReadLine();
+            MenuHolder.GetMenuController().Show();
         }
     }
 }

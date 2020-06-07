@@ -51,6 +51,42 @@ namespace Assignment3.Helpers
             return tables;
         }
 
+        public static Table GetTable(int tableId)
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT * FROM Tables WHERE TableID = $id";
+            sqlite_cmd.Parameters.AddWithValue("$id", tableId);
+
+            SQLiteDataReader sqlite_reader = sqlite_cmd.ExecuteReader();
+            sqlite_reader.Read();
+            return new Table(sqlite_reader.GetInt32(0), sqlite_reader.GetString(1));
+        }
+
+        public static List<Reservation> LoadFromDB_Reservations()
+        {
+            List<Reservation> res = new List<Reservation>();
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT * FROM Reservations";
+            
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int id, custId, tableId = 0;
+                DateTime resTime;
+                id = reader.GetInt32(0);
+                custId = reader.GetInt32(1);
+                if (reader[2].GetType() != typeof(DBNull))
+                {
+                    tableId = reader.GetInt32(2);
+                }
+                resTime = Convert.ToDateTime(reader.GetString(3));
+                res.Add(new Reservation(id, custId, tableId, resTime));
+            }
+            return res;
+        }
+
         public static List<Customer> LoadFromDB_Customers()
         {
             SQLiteCommand sqlite_cmd;
@@ -83,17 +119,6 @@ namespace Assignment3.Helpers
                 created = Convert.ToDateTime(reader.GetString(4));
                 customers.Add(new Customer(id, name, phone, address, created));
             }
-            //SQLiteCommand sqlite_cmd2;
-            //sqlite_cmd2 = sqlite_conn.CreateCommand();
-            //// add test customer to 
-            //sqlite_cmd2.CommandText = "INSERT INTO Customers (CustomerID, CustomerName, CustomerPhone, CustomerAddress, CustomerDateCreated) VALUES ($id, $name, $phone, $address, $date)";
-            //sqlite_cmd2.Parameters.AddWithValue("$id", 4);
-            //sqlite_cmd2.Parameters.AddWithValue("$name", "pete tester");
-            //sqlite_cmd2.Parameters.AddWithValue("$phone", "89858985");
-            //sqlite_cmd2.Parameters.AddWithValue("$address", "4 martin crescent, Caulfied");
-            //sqlite_cmd2.Parameters.AddWithValue("$date", DateTime.Now);
-            //sqlite_cmd2.ExecuteNonQuery();
-
             return customers;
         }
 
@@ -202,6 +227,16 @@ namespace Assignment3.Helpers
             return reader.GetInt32(0) + 1;
         }
 
+        public static int GetNextResId()
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT seq FROM sqlite_sequence WHERE name = 'Reservations'";
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            return reader.GetInt32(0) + 1;
+        }
+
         public static void AddProduct(IItem productToAdd)
         {
             // extract info from product
@@ -232,6 +267,22 @@ namespace Assignment3.Helpers
             sqlite_cmd.ExecuteNonQuery();
         }
 
+        public static void AddReservation(Reservation resToAdd)
+        {
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "INSERT INTO Reservations (ReservationID, CustomerID, TableID, ReservationDateTime) VALUES ($resid, $custid, $tableid, $resdatetime)";
+            sqlite_cmd.Parameters.AddWithValue("$resid", resToAdd.GetId());
+            sqlite_cmd.Parameters.AddWithValue("$custId", resToAdd.GetCustId());
+            sqlite_cmd.Parameters.AddWithValue("$tableid", resToAdd.GetTableId());
+            sqlite_cmd.Parameters.AddWithValue("$resdatetime", resToAdd.GetReservationTime().ToString("yyyy-MM-dd HH:mm:ss"));
+
+            // insert it
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
         public static void UpdateProduct(IItem productToUpdate)
         {
             // create db query
@@ -259,7 +310,7 @@ namespace Assignment3.Helpers
             sqlite_cmd.Parameters.AddWithValue("$name", customer.GetName());
             sqlite_cmd.Parameters.AddWithValue("$phone", customer.GetPhone());
             sqlite_cmd.Parameters.AddWithValue("$address", customer.GetAddress());
-            sqlite_cmd.Parameters.AddWithValue("$created", DateTime.Now.ToString());
+            sqlite_cmd.Parameters.AddWithValue("$created", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             // run that shit
             sqlite_cmd.ExecuteNonQuery();
@@ -286,6 +337,23 @@ namespace Assignment3.Helpers
             }
         }
 
+        public static string LookupCustomerName(int id)
+        {
+            // query to see if the number exists. returns -1 if not; otherwise returns customerId
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "SELECT CustomerName FROM Customers WHERE CustomerID = $id";
+            sqlite_cmd.Parameters.AddWithValue("$id", id);
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            string custName = "";
+            if (reader[0].GetType() != typeof(DBNull))
+                custName = reader.GetString(0);
+            return custName;
+        }
+
         public static void SaveOrder(Order orderToSave)
         {
             // save the supplied order into the db.
@@ -301,7 +369,7 @@ namespace Assignment3.Helpers
             sqlite_cmd.Parameters.AddWithValue("$id", saleID);
             sqlite_cmd.Parameters.AddWithValue("$total", Math.Round(orderToSave.GetOrderCost(),2));
             sqlite_cmd.Parameters.AddWithValue("$custid", orderToSave.CustomerID());
-            sqlite_cmd.Parameters.AddWithValue("$date", DateTime.Now.ToString());
+            sqlite_cmd.Parameters.AddWithValue("$date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             // run it
             sqlite_cmd.ExecuteNonQuery();
@@ -344,8 +412,27 @@ namespace Assignment3.Helpers
                 theSales.Add("| " + saleid.ToString().PadRight(3) + "| " + saleDate.PadRight(28) + "| " + price.PadRight(6) + "| " + custName.PadRight(20) + "|");
             }
 
-
             return theSales;
+        }
+
+        public static Reservation GetReservation(int resId)
+        {
+            // create db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add test customer to 
+            sqlite_cmd.CommandText = "SELECT * FROM Reservations WHERE ReservationID = $id";
+            sqlite_cmd.Parameters.AddWithValue("$id", resId);
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            //reader.Read();
+            if (!reader.Read())
+            {
+                return null;
+            }
+            else
+            {
+                return new Reservation(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), DateTime.Parse(reader.GetString(3)));
+            }
         }
 
     }

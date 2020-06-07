@@ -25,9 +25,9 @@ namespace Assignment3.Views
             Console.WriteLine(" ================= list of all reservations ==============");
         }
 
-        public void ShowReservation()
+        public void ShowReservation(string res)
         {
-            //
+            Console.WriteLine(res);
         }
     }
 }

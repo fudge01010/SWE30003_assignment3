@@ -56,7 +56,7 @@ namespace Assignment3.Controllers
                     DBManager.CloseConnection();
                     Console.WriteLine("Goodbye!");
                     Environment.Exit(0);
-                } else 
+                } else
                 {
                     // valid selection - go to it.
                     controllerList[option].Show();
