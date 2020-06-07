@@ -34,5 +34,32 @@ namespace Assignment3.Models
         {
             return tickets;
         }
+
+        public List<Ticket> BarTickets()
+        {
+            //
+            List<Ticket> barTickets = new List<Ticket>();
+            foreach (Ticket t in Tickets())
+            {
+                if (t.HasDrinkItems())
+                {
+                    barTickets.Add(t);
+                }
+            }
+            return barTickets;
+        }
+
+        public List<Ticket> KitchenTickets()
+        {
+            List<Ticket> foodTickets = new List<Ticket>();
+            foreach (Ticket t in Tickets())
+            {
+                if (t.HasFoodItems())
+                {
+                    foodTickets.Add(t);
+                }
+            }
+            return foodTickets;
+        }
     }
 }

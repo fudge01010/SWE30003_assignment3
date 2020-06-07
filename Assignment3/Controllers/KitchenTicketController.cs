@@ -44,7 +44,14 @@ namespace Assignment3.Controllers
         {
             this.view.ShowView();
             int i = 0;
-            foreach (Ticket t in ticketMan.Tickets())
+            if (ticketMan.KitchenTickets().Count == 0)
+            {
+                this.view.ShowMessage("There are no current kitchen tickets. Press enter to return to the main menu.\n\n");
+                Console.ReadLine();
+                MenuHolder.GetMenuController().Show();
+                // should jump back to main menu here
+            }
+            foreach (Ticket t in ticketMan.KitchenTickets())
             {
                 if (t.Parent().GetType() == typeof(DineIn))
                 {
@@ -90,16 +97,25 @@ namespace Assignment3.Controllers
                 }
                 else
                 {
-                    if (selection >= ticketMan.Tickets().Count || selection < 0)
+                    if (selection >= ticketMan.KitchenTickets().Count || selection < 0)
                     {
                         this.view.ShowError("Enter a valid option");
                         continue;
                     }
                     else
                     {
-                        ticketMan.Tickets().Remove(ticketMan.Tickets()[selection]);
-                        // Business logic to mark ticket as complete, and fold items into order.
-                        // markoff[input] - or something to that effect
+                        //remove related items from ticket
+                        foreach (IItem itm in ticketMan.KitchenTickets()[selection].KitchenItems())
+                        {
+                            ticketMan.KitchenTickets()[selection].Items().Remove(itm);
+                        }
+                        // ticket should now have only BAR items on it. If we've removed the last item from the ticket, close it fully:
+
+                        if (ticketMan.KitchenTickets()[selection].Items().Count == 0)
+                        {
+                            // no items on ticket - delete ticket
+                            ticketMan.KitchenTickets().Remove(ticketMan.KitchenTickets()[selection]);
+                        }
                         Show();
                     }
                 }

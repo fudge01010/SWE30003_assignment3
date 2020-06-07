@@ -46,6 +46,29 @@ namespace Assignment3.Models
             return drinkItems;
         }
 
+        public bool HasDrinkItems()
+        {
+            if (BarItems().Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool HasFoodItems()
+        {
+            if (KitchenItems().Count > 0)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+
+        }
         public List<IItem> Items()
         {
             return items;

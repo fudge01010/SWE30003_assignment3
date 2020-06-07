@@ -37,28 +37,35 @@ namespace Assignment3.Controllers
         {
             this.view.ShowView();
             int i = 0;
-            for (i =0; i<ticketMan.Tickets().Count; i++)
+            if (ticketMan.BarTickets().Count == 0)
             {
-                if (ticketMan.Tickets()[i].Parent().GetType() == typeof(DineIn))
+                this.view.ShowMessage("There are no current bar tickets. Press enter to return to the main menu.\n\n");
+                Console.ReadLine();
+                MenuHolder.GetMenuController().Show();
+                // should jump back to main menu here
+            }
+            for (i =0; i<ticketMan.BarTickets().Count; i++)
+            {
+                if (ticketMan.BarTickets()[i].Parent().GetType() == typeof(DineIn))
                 {
                     // it's a dine in order
                     string items = "";
-                    foreach (IItem itm in ticketMan.Tickets()[i].BarItems())
+                    foreach (IItem itm in ticketMan.BarTickets()[i].BarItems())
                     {
                         items += "\t - " + itm.GetName() + "\n";
                     }
-                    this.view.ShowTicket(ticketMan.Tickets()[i].TableNumber(), items, (DateTime.Now- ticketMan.Tickets()[i].TimeOpened()).ToString(), i);
+                    this.view.ShowTicket(ticketMan.BarTickets()[i].TableNumber(), items, (DateTime.Now- ticketMan.BarTickets()[i].TimeOpened()).ToString(), i);
                 }
-                if (ticketMan.Tickets()[i].Parent().GetType() == typeof(TakeAway) )
+                if (ticketMan.BarTickets()[i].Parent().GetType() == typeof(TakeAway) )
                 {
                     // it's a takeaway ticket
                     string items = "";
-                    foreach (IItem itm in ticketMan.Tickets()[i].BarItems())
+                    foreach (IItem itm in ticketMan.BarTickets()[i].BarItems())
                     {
                         items += "\t - " + itm.GetName() + "\n";
                     }
                     
-                    this.view.ShowTicket(((TakeAway)ticketMan.Tickets()[i].Parent()).Name(), items, (DateTime.Now - ticketMan.Tickets()[i].TimeOpened()).ToString(), i);
+                    this.view.ShowTicket(((TakeAway)ticketMan.BarTickets()[i].Parent()).Name(), items, (DateTime.Now - ticketMan.BarTickets()[i].TimeOpened()).ToString(), i);
                 }
                 i++;
             }
@@ -87,9 +94,18 @@ namespace Assignment3.Controllers
                         continue;
                     } else
                     {
-                        ticketMan.Tickets().Remove(ticketMan.Tickets()[selection]);
-                        // Business logic to mark ticket as complete, and fold items into order.
-                        // markoff[input] - or something to that effect
+                        //remove related items from ticket
+                        foreach (IItem itm in ticketMan.BarTickets()[selection].BarItems())
+                        {
+                            ticketMan.BarTickets()[selection].Items().Remove(itm);
+                        }
+                        // ticket should now have only food items on it. If we've removed the last item from the ticket, close it fully:
+
+                        if (ticketMan.BarTickets()[selection].Items().Count == 0)
+                        {
+                            // no items on ticket - delete ticket
+                            ticketMan.BarTickets().Remove(ticketMan.BarTickets()[selection]);
+                        }    
                         Show();
                     }
                 }

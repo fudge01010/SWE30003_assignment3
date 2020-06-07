@@ -67,6 +67,7 @@ namespace Assignment3.Controllers
                 }
                 else if (input == "e")
                 {
+                    // EDIT ORDER
                     int numb = -1;
                     while (true)
                     {
@@ -85,7 +86,7 @@ namespace Assignment3.Controllers
                 }
                 else if (input == "n")
                 {
-                    // new order
+                    // NEW ORDER
                     view.ShowMessage("Input 'd' for dine-in, 't' for takeaway");
                     input = Console.ReadLine();
                     while (true)

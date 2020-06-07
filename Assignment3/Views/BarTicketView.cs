@@ -40,6 +40,7 @@ namespace Assignment3.Views
         public void ShowTicket(string name, string items, string openFor, int ticketNumber)
         {
             // overloaded method for takeaway (name instead of table number)
+            Console.WriteLine("Ticket Number: " + ticketNumber.ToString());
             Console.WriteLine("Ticket for takeaway order : " + name);
             Console.WriteLine("Ticket has been open for: " + openFor);
             Console.WriteLine("Ticket contents:");
