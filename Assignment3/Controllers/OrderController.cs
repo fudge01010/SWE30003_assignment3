@@ -59,30 +59,71 @@ namespace Assignment3.Controllers
             while (true)
             {
                 // main command input loop
-                view.ShowMessage("Enter 'n' for a new order, or 'e' to perform actions on an existing order. Enter 'm' to go back to the main menu.");
+                view.ShowMessage("Enter 'n' for a new order, 'e' to perform actions on an existing order, or 'p' to mark an order as paid.\n.Enter 'm' to go back to the main menu.");
                 string input = Console.ReadLine();
                 if (input == "e" && orders.Count <= 0)
                 {
                     view.ShowError("There are no active orders to edit.");
+                } else if (input == "p" && orders.Count <= 0)
+                {
+                    view.ShowError("There are no active orders to mark as paid.");
                 }
                 else if (input == "e")
                 {
                     // EDIT ORDER
-                    int numb = -1;
+                    int numb;
                     while (true)
                     {
+                        numb = -1;
                         view.ShowMessage("enter the number of the order to edit");
                         input = Console.ReadLine();
-                        int.TryParse(input, out (numb));
+                        if (!int.TryParse(input, out (numb)))
+                        {
+
+                            view.ShowError("Please enter only numbers.");
+                        }
                         if (numb >= orders.Count || numb < 0)
                         {
                             view.ShowError("Please enter a valid number in range");
                         } else
                         {
-                            break;
+                            view.ShowMessage("TODO");
+                            EditOrder(orders[numb]);
                         }
                     }
-                    EditOrder(orders[numb]);
+                }
+                else if (input == "p")
+                {
+                    // PAY FOR ORDER
+                    int numb = -1;
+                    while (true)
+                    {
+                        view.ShowMessage("enter the number of the order to mark as paid.");
+                        input = Console.ReadLine();
+                        int.TryParse(input, out (numb));
+                        if (numb >= orders.Count || numb < 0)
+                        {
+                            view.ShowError("Please enter a valid number in range");
+                        }
+                        else
+                        {
+                            view.ShowMessage("Are you sure you wish to mark order " + numb.ToString() + "as paid, for a cost of $" + orders[numb].GetOrderCost().ToString() +"? (y/n)" );
+                            input = Console.ReadLine();
+                            if (input == "y")
+                            {
+                                view.ShowMessage("Marking order as paid, and saving to DB...");
+                                DBManager.SaveOrder(orders[numb]);
+                                // order should be successfully written to DB, so we can delete the order now
+                                orders.Remove(orders[numb]);
+                                view.ShowMessage("Done! Press enter to go back to the main menu.");
+                                Console.ReadLine();
+                                MenuHolder.GetMenuController().Show();
+                            } else
+                            {
+                                Show();
+                            }
+                        }
+                    }
                 }
                 else if (input == "n")
                 {
@@ -203,7 +244,7 @@ namespace Assignment3.Controllers
                     MenuHolder.GetMenuController().Show();
                 } else
                 {
-                    throw new Exception();
+                    view.ShowError("Please only enter 'n', 'e', 'p', or 'm'.");
                 }
             }
         }
@@ -239,7 +280,7 @@ namespace Assignment3.Controllers
         {
             //
             view.Clear();
-            view.ShowMessage("Enter 'a' to add items to the order. 'p' to mark the order as paid. 'r' to remove items from the order.");
+            view.ShowMessage("Enter 'a' to add items to the order, or 'r' to remove items from the order.");
             string input;
             while (true)
             {
@@ -251,14 +292,11 @@ namespace Assignment3.Controllers
                         orderToEdit.SetTempTicket(new Ticket(orderToEdit));
                         AddItems(orderToEdit);
                         break;
-                    case "p":
-                        // mark order as paid
-                        break;
                     case "r":
                         // remove items from the order
                         break;
                     default:
-                        view.ShowError("Please enter either 'a', 'p' or 'r'");
+                        view.ShowError("Please enter either 'a' or 'r'");
                         break;
                 }
             }

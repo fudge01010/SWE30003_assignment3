@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Assignment3.Models
 {
-    class Ticket
+    public class Ticket
     {
         private List<IItem> items;
         private DateTime timeOpened;

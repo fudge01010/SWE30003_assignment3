@@ -13,6 +13,7 @@ namespace Assignment3
         protected IController kitchenTicketController;
         protected IController barTicketController;
         protected IController itemController;
+        protected IController salesController;
 
         // "managers" - in the Model domain
         protected TableManager tableManager;
@@ -71,6 +72,10 @@ namespace Assignment3
 
             itemController = new ItemController(itemManager);
             menuController.AddController(itemController);
+
+            // create the sales view controller, and add it to menu
+            salesController = new SalesController();
+            menuController.AddController(salesController);
 
             // now we have all the mvc controllers created, create the "managers" for the data models.
             // each constructor should have a call to the DB helper class, to load it's data.

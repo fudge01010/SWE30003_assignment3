@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assignment3.Models
 {
-    class Order
+    public class Order
     {
         private DateTime timeOpened;
         private List<IItem> items;

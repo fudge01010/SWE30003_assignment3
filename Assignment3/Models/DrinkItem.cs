@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Assignment3.Models
 {
-    class DrinkItem : IItem
+    public class DrinkItem : IItem
     {
         private string name;
         private string description;

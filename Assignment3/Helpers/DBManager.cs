@@ -192,6 +192,16 @@ namespace Assignment3.Helpers
             return reader.GetInt32(0) + 1;
         }
 
+        public static int GetNextSaleId()
+        {
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            sqlite_cmd.CommandText = "SELECT seq FROM sqlite_sequence WHERE name = 'Sales'";
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            reader.Read();
+            return reader.GetInt32(0) + 1;
+        }
+
         public static void AddProduct(IItem productToAdd)
         {
             // extract info from product
@@ -274,6 +284,68 @@ namespace Assignment3.Helpers
             {
                 return reader.GetInt32(0);
             }
+        }
+
+        public static void SaveOrder(Order orderToSave)
+        {
+            // save the supplied order into the db.
+            // first, we save the total cost of the order + relevant details (to generate the required SaleID, which is a FK/PK in the SaleItems table
+            // get the next sale ID we're going to use for this row:
+            int saleID = GetNextSaleId();
+
+            // create Sale db query
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add sql with parameters 
+            sqlite_cmd.CommandText = "INSERT INTO Sales (SaleID, SaleDate, Saletotal, CustomerID) VALUES ($id, $date, $total, $custid)";
+            sqlite_cmd.Parameters.AddWithValue("$id", saleID);
+            sqlite_cmd.Parameters.AddWithValue("$total", Math.Round(orderToSave.GetOrderCost(),2));
+            sqlite_cmd.Parameters.AddWithValue("$custid", orderToSave.CustomerID());
+            sqlite_cmd.Parameters.AddWithValue("$date", DateTime.Now.ToString());
+
+            // run it
+            sqlite_cmd.ExecuteNonQuery();
+
+            // great - now we have a sale in the Sale table. We can use that ID to insert into SaleProducts table:
+            // loop over the items in the sale
+            foreach (IItem itm in orderToSave.ItemsOnOrder())
+            {
+                // refresh the DB query
+                sqlite_cmd = sqlite_conn.CreateCommand();
+                sqlite_cmd.CommandText = "INSERT INTO SaleItems (SaleID, ProductID) VALUES ($id, $pid)";
+                sqlite_cmd.Parameters.AddWithValue("$id", saleID);
+                sqlite_cmd.Parameters.AddWithValue("$pid", itm.GetId());
+                // run that shit
+                sqlite_cmd.ExecuteNonQuery();
+            }
+
+            // these aren't the droids you're looking for
+        }
+
+        public static List<string> GetSales()
+        {
+            List<string> theSales = new List<string>();
+            SQLiteCommand sqlite_cmd;
+            sqlite_cmd = sqlite_conn.CreateCommand();
+            // add sql with parameters 
+            sqlite_cmd.CommandText = "SELECT SaleID, SaleDate, SaleTotal, CustomerName FROM Sales INNER JOIN Customers ON Customers.CustomerID = Sales.CustomerID";
+
+            SQLiteDataReader reader = sqlite_cmd.ExecuteReader();
+            while (reader.Read())
+            { 
+                //it's a food item.
+                int saleid = reader.GetInt32(0);
+                string saleDate = reader.GetString(1);
+                string price = reader.GetDecimal(2).ToString();
+                string custName = "";
+                if (reader[3].GetType() != typeof(DBNull))
+                    custName = reader.GetString(3);
+
+                theSales.Add("| " + saleid.ToString().PadRight(3) + "| " + saleDate.PadRight(28) + "| " + price.PadRight(6) + "| " + custName.PadRight(20) + "|");
+            }
+
+
+            return theSales;
         }
 
     }

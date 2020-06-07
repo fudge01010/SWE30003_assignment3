@@ -104,17 +104,19 @@ namespace Assignment3.Controllers
                     }
                     else
                     {
-                        //remove related items from ticket
-                        foreach (IItem itm in ticketMan.KitchenTickets()[selection].KitchenItems())
+                        // if there's ONLY food on the ticket, just remove it:
+                        if (ticketMan.KitchenTickets()[selection].BarItems().Count == 0)
                         {
-                            ticketMan.KitchenTickets()[selection].Items().Remove(itm);
-                        }
-                        // ticket should now have only BAR items on it. If we've removed the last item from the ticket, close it fully:
-
-                        if (ticketMan.KitchenTickets()[selection].Items().Count == 0)
+                            // no BAR items on this KITCHEN ticket - delete ticket
+                            ticketMan.Tickets().Remove(ticketMan.KitchenTickets()[selection]);
+                        } else
                         {
-                            // no items on ticket - delete ticket
-                            ticketMan.KitchenTickets().Remove(ticketMan.KitchenTickets()[selection]);
+                            // there IS bar stuff here too. just remove our kitchen stuff.
+                            foreach (IItem itm in ticketMan.KitchenTickets()[selection].KitchenItems())
+                            {
+                                ticketMan.KitchenTickets()[selection].Items().Remove(itm);
+                            }
+                            // ticket should now have only BAR items on it. If we've removed the last item from the ticket, close it fully:
                         }
                         Show();
                     }
